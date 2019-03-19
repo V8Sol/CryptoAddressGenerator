@@ -1,0 +1,13 @@
+{
+  "name": "CryptoAddressGenerator",
+  "version": "1.0.0",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bitcoinjs-lib": "3.3.2",
+    "keythereum": "^1.0.4",
+    "mysql": "^2.16.0",
+    "rippled-ws-client": "^1.0.0",
+    "rippled-ws-client-sign": "^0.1.4",
+    "web3": "^1.0.0-beta.36"
+  }
+}
