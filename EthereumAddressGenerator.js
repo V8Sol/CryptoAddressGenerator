@@ -3,7 +3,7 @@ const web3 = require("web3");
 const mysql = require("mysql")
 
 const con = mysql.createConnection({
-    host: "trading-bot.ca2iecww9r6d.ap-south-1.rds.amazonaws.com",
+    host: "crypto.ca2iecww9r6d.ap-south-1.rds.amazonaws.com",
     user: "trading_bot",
     password: "Rspl123#",
     database: "crypto_world"
