@@ -32,7 +32,7 @@ const run = async () => {
     let index = 0
     try {
         while (true) {
-            let sql = `SELECT * FROM address limit ${index}, 1`;
+            let sql = `SELECT * FROM address where balance is null limit 1`;
             let results = await query(sql)
             const balance = await getBalance(results[0].address, results[0].coin)
             if (balance > 0) {
@@ -48,8 +48,7 @@ const run = async () => {
             query(updateSql)
             index++
         }
-    }
-    catch(err) {
+    } catch(err) {
         console.log(err)
         index--;
     }
