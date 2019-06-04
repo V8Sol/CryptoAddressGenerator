@@ -22,7 +22,11 @@ const getBalance = async (address, coin) => {
             url = `https://data.ripple.com/v2/accounts/${address}/balances`
         }
         const response = await axios.get(url);
-        return Promise.resolve(parseFloat(response.data))
+	var balance = parseFloat(response.data)
+	if(coin == 'ETH') {
+		balance = parseFloat(response.data.balance)
+	}
+        return Promise.resolve(balance)
     } catch (error) {
         return Promise.resolve(0);
     }
@@ -35,6 +39,7 @@ const run = async () => {
             let sql = `SELECT * FROM address where balance is null limit 1`;
             let results = await query(sql)
             const balance = await getBalance(results[0].address, results[0].coin)
+	    console.log(balance)
             if (balance > 0) {
                 axios.post('https://hooks.slack.com/services/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', {
                     "text": `Found ${results[0].coin} address ${results[0].address} with balance ${balance}`
