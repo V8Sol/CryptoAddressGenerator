@@ -40,6 +40,13 @@ const run = async () => {
   let first_record = await query(index_sql)
   let index = first_record[0].id
   try {
+    axios.post('https://hooks.slack.com/services/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', {
+      "text": "Address scanning started..."
+    }).then(function (response) {
+      console.log(response);
+    }).catch(function (error) {
+      console.log(error);
+    })
     while (true) {
       let sql = `SELECT * FROM address where id = ${index}`;
       let results = await query(sql)
