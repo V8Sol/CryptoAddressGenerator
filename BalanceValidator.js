@@ -27,7 +27,7 @@ const getBalance = async (address, coin) => {
     } else if (coin == 'ETH') {
       var balance = parseFloat(response.data.balance) + parseFloat(response.data.transfers.length)
     } else {
-      var balance = parseFloat(response.data)
+      balance = parseFloat(response.data.balances[0].value)
     }
     return Promise.resolve(balance)
   } catch (error) {
