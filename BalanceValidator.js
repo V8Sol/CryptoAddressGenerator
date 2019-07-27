@@ -39,7 +39,6 @@ const run = async () => {
   let index_sql = `SELECT * FROM address where id > 2871561 and balance is null limit 1`;
   let first_record = await query(index_sql)
   let index = first_record[0].id
-	console.log(index);
   try {
     axios.post('https://hooks.slack.com/services/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', {
       "text": "Address scanning started..."
