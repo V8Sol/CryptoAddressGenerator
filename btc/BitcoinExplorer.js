@@ -3,9 +3,9 @@ const mysql = require("mysql")
 const util = require('util');
 
 const con = mysql.createConnection({
-  host: "crypto-scanner.ca2iecww9r6d.ap-south-1.rds.amazonaws.com",
-  user: "trading_bot",
-  password: "Rspl123#",
+  host: "34.93.83.72",
+  user: "root",
+  password: "root",
   database: "crypto_world"
 });
 
@@ -17,6 +17,7 @@ const getTransactions = async () => {
     const response = await axios.get(url);
     return Promise.resolve(response.data)
   } catch (error) {
+	  console.log(error);
     return Promise.resolve(0);
   }
 };

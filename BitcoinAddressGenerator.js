@@ -3,9 +3,9 @@ const axios = require("axios");
 const mysql = require("mysql")
 
 const con = mysql.createConnection({
-    host: "crypto-scanner.ca2iecww9r6d.ap-south-1.rds.amazonaws.com",
-    user: "trading_bot",
-    password: "Rspl123#",
+    host: "34.93.83.72",
+    user: "root",
+    password: "root",
     database: "crypto_world"
 });
 
