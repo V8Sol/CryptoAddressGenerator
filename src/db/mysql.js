@@ -5,6 +5,6 @@ exports.getConnection = function() {
     host: "34.93.83.72",
     user: "root",
     password: "root",
-    database: "crypto_world"
+    database: "crypto"
   })
 }
