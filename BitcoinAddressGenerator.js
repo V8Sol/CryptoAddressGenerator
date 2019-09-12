@@ -19,6 +19,7 @@ con.connect(function (err) {
             const response = await axios.get(url);
             return Promise.resolve(response.data / 100000000)
         } catch (error) {
+            console.log(error);
             return Promise.resolve(0);
         }
     };
