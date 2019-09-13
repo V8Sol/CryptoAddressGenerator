@@ -1,13 +1,7 @@
-const axios = require("axios");
-const mysql = require("mysql")
+const mysql = require('./db/mysql')
 const util = require('util');
 
-const con = mysql.createConnection({
-  host: "crypto-scanner.ca2iecww9r6d.ap-south-1.rds.amazonaws.com",
-  user: "trading_bot",
-  password: "Rspl123#",
-  database: "crypto_world"
-});
+const con = mysql.getConnection()
 
 const query = util.promisify(con.query).bind(con);
 

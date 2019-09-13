@@ -2,6 +2,7 @@ const bitcoin = require('./bitcoin')
 const slack = require('../notification/slack')
 
 const run = async () => {
+  slack.alert("Bitcoin address finder started!");
   while (true) {
     try {
       const keyPair = bitcoin.getKeyPair();
