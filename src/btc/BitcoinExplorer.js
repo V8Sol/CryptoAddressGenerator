@@ -1,23 +1,11 @@
-const axios = require("axios");
-const mysql = require("db/mysql")
+const mysql = require("../db/mysql")
 const util = require('util');
+const bitcoin = require('./bitcoin')
+const slack = require('../notification/slack')
 
 const con = mysql.getConnection()
 
 const query = util.promisify(con.query).bind(con);
-
-const getLatestBlock = async () => {
-  const url = `https://blockchain.info/latestblock`
-  const response = await axios.get(url);
-  return Promise.resolve(response.data)
-}
-
-const getTransactions = async () => {
-  const blockNumber = await getLatestBlock()
-  const url = `https://blockchain.info/rawblock/${blockNumber}`
-  const response = await axios.get(url);
-  return Promise.resolve(response.data)
-};
 
 const isAddressExist = async (address) => {
   let sql = `select * from address where address = '${address}'`
@@ -25,33 +13,45 @@ const isAddressExist = async (address) => {
   return isRecordExist.length > 0;
 };
 
-const notifyOnSlack = async address => {
-  console.log(`Found Bitcoin address ${address} in database`)
-  axios.post('https://hooks.slack.com/services/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', {
-    "text": `Found Bitcoin address ${address} in database`
-  }).then(function (response) {
-    console.log(response);
-  }).catch(function (error) {
-    console.log(error);
-  });
-};
+function sleep(ms){
+  return new Promise(resolve=>{
+    setTimeout(resolve,ms)
+  })
+}
 
 const run = async () => {
+  slack.alert("Bitcoin Explorer Started searching for address...")
+  var lastBlockNumber = 0
   while (true) {
     try {
-      const transactions = await getTransactions();
-      for (i in transactions) {
-        const inputs = transactions[i].inputs
-        for (j in inputs) {
-          const addresses = inputs[j].addresses
-          for (k in addresses) {
-            const address = addresses[k]
-            const isExist = await isAddressExist(address);
-            if (isExist) {
-              notifyOnSlack(address)
+      const blockNumber = await bitcoin.getLatestBlock()
+      if (lastBlockNumber != blockNumber) {
+        const transactions = await bitcoin.getTransactions(blockNumber)
+        for (t in transactions) {
+          const txn = transactions[t]
+          const inputs = txn.inputs
+          const outputs = txn.out
+          for(i in inputs) {
+            if(inputs[i].addr && inputs[i].addr.startsWith("1")) {
+              const isExist = await isAddressExist(inputs[i].addr)
+              if(isExist) {
+                slack.notify("Bitcoin", inputs[i].addr, "******", "******")
+              }
+            }
+          }
+
+          for(o in outputs) {
+            if(outputs[0].addr && outputs[0].addr.startsWith("1")) {
+              const isExist = await isAddressExist(outputs[0].addr)
+              if(isExist) {
+                slack.notify("Bitcoin", outputs[0].addr, "******", "******")
+              }
             }
           }
         }
+        lastBlockNumber = blockNumber
+      } else {
+        await sleep(10000)
       }
     } catch (error) {
       console.log(error);

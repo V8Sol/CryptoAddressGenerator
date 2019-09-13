@@ -13,8 +13,7 @@ exports.getLatestBlock = async () => {
   return Promise.resolve(response.data.block_index)
 }
 
-exports.getTransactions = async () => {
-  const blockNumber = await this.getLatestBlock()
+exports.getTransactions = async (blockNumber) => {
   const url = `https://blockchain.info/rawblock/${blockNumber}`
   const response = await axios.get(url);
   return Promise.resolve(response.data.tx)
